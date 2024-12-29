@@ -1,6 +1,5 @@
 package foro.hub.api.domain.topico;
 
-import foro.hub.api.domain.usuario.Usuario;
 
 import java.time.LocalDateTime;
 

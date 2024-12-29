@@ -7,9 +7,11 @@ import foro.hub.api.domain.topico.ListadoTopicoDTO;
 import foro.hub.api.domain.topico.Topico;
 import foro.hub.api.domain.topico.TopicoDTO;
 import foro.hub.api.domain.topico.TopicoRepository;
+import foro.hub.api.domain.usuario.Usuario;
 import foro.hub.api.domain.usuario.UsuarioRepository;
 import foro.hub.api.domain.topico.DatosActualizarTopico;
 import foro.hub.api.domain.topico.DatosRespuestaTopico;
+import foro.hub.api.infra.security.TokenService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +34,28 @@ public class TopicoController {
     private TopicoRepository topicoRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private TokenService tokenService;
+
 
     @PostMapping
-    public void registrarTopico(@RequestBody @Valid TopicoDTO datosRegistroTopico) {
-        topicoRepository.save(new Topico(datosRegistroTopico));
+    @Transactional
+    public ResponseEntity<?> registrarTopico(
+            @RequestBody @Valid TopicoDTO datosRegistroTopico,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+
+        String token = authorizationHeader.replace("Bearer ", "");
+        Long idUsuario = tokenService.getIdUsuario(token);
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Topico topico = new Topico(datosRegistroTopico);
+        topico.setUsuario(usuario);
+        topico.setAutor(usuario.getNombre());
+        topicoRepository.save(topico);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Tópico registrado con éxito");
     }
+
 
 
     @GetMapping
@@ -61,7 +81,7 @@ public class TopicoController {
         topico.actualizarDatos(datosActualizarTopico);
     }
 
-  //DELETE LOGICO
+    //DELETE LOGICO
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity eliminarTopico(@PathVariable Long id){
@@ -71,7 +91,7 @@ public class TopicoController {
 
     }
 
-////    //DELETE EN BASE DE DATOS
+//    //DELETE EN BASE DE DATOS
 //    @DeleteMapping("/{id}")
 //    @Transactional
 //    public void  eliminarTopico(@PathVariable Long id){
@@ -86,20 +106,4 @@ public class TopicoController {
 
 //------------------------------------------------------------fin-------------------------------------------------------
 
-//Metodo post para que agregué el id
-
-//    @PostMapping
-//    public void registrarTopico(@RequestBody @Valid TopicoDTO datosRegistroTopico) {
-//        // Simulamos un usuario logueado (puedes reemplazar esto con la lógica de sesión)
-//        Long idUsuarioLogueado = 1L; // ID del usuario autenticado actual
-//        Usuario usuarioLogueado = usuarioRepository.findById(idUsuarioLogueado)
-//                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-//
-//        // Crear el tópico asociado al usuario logueado
-//        Topico topico = new Topico(datosRegistroTopico);
-//        topico.setId_usuario(usuarioLogueado);
-//
-//        // Guardar el tópico en la base de datos
-//        topicoRepository.save(topico);
-//    }
 

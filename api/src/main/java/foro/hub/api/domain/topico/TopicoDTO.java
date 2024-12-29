@@ -21,11 +21,8 @@ public record TopicoDTO(
         @NotNull
         EstadoDelTopico estado,
 
-        @NotNull
-        String autor,
-
-//      @NotNull
-        Usuario id_usuario,
+//        @NotNull
+//        String autor,
 
         @NotBlank
         String curso

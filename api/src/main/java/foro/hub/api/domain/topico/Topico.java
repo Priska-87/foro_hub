@@ -35,6 +35,7 @@ public class Topico {
     @JoinColumn(name= "id_usuario")
     private Usuario  id_usuario;
 
+    @Setter
     private String autor;
 
     private String curso;
@@ -49,8 +50,8 @@ public class Topico {
         this.fecha = datosRegistroTopico.fecha();
         this.fecha =LocalDateTime.now();
         this.estado = datosRegistroTopico.estado();
-        this.autor = datosRegistroTopico.autor();
-        this.id_usuario = datosRegistroTopico.id_usuario();
+//        this.autor = datosRegistroTopico.autor();
+//        this.id_usuario = datosRegistroTopico.id_usuario();
         this.curso = datosRegistroTopico.curso();
         this.activo = true;
     }
@@ -94,6 +95,10 @@ public class Topico {
     public void desactivarTopico() {
         this.activo = false;
         this.estado = EstadoDelTopico.valueOf("INACTIVO");
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.id_usuario = usuario;
     }
 
 
