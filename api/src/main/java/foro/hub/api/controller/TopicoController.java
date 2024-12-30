@@ -12,6 +12,7 @@ import foro.hub.api.domain.usuario.UsuarioRepository;
 import foro.hub.api.domain.topico.DatosActualizarTopico;
 import foro.hub.api.domain.topico.DatosRespuestaTopico;
 import foro.hub.api.infra.security.TokenService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @ResponseBody
 @RequestMapping("/topico")
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
     @Autowired
@@ -49,6 +51,12 @@ public class TopicoController {
         Long idUsuario = tokenService.getIdUsuario(token);
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (topicoRepository.existsByTituloAndAutor(datosRegistroTopico.titulo(), usuario.getNombre())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Ya existe un tópico con este título y autor.");
+        }
+
         Topico topico = new Topico(datosRegistroTopico);
         topico.setUsuario(usuario);
         topico.setAutor(usuario.getNombre());

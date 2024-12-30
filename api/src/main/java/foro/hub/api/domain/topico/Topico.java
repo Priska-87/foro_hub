@@ -49,7 +49,6 @@ public class Topico {
         this.mensaje = datosRegistroTopico.mensaje();
         this.fecha = datosRegistroTopico.fecha();
         this.fecha =LocalDateTime.now();
-//        this.estado = datosRegistroTopico.estado();
         this.curso = datosRegistroTopico.curso();
         this.activo = true;
     }

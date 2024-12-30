@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-//DTO (DATA TRANSFER OBJECT - TRANSFIERE LO QUE ESTA VINIENDO DEL API - EXPONE SOLO LOS DATOS QUE TU QUIERES
+//DTO (DATA TRANSFER OBJECT - TRANSFIERE LO QUE ESTA VINIENDO DEL API - EXPONE SOLO LOS DATOS QUE TU QUIERES)
 
 public record TopicoDTO(
 
@@ -17,9 +17,6 @@ public record TopicoDTO(
 
         @NotNull
         LocalDateTime fecha,
-
-//        @NotNull
-//        EstadoDelTopico estado,
 
         @NotBlank
         String curso
