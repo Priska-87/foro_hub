@@ -28,7 +28,7 @@ public class Topico {
     private LocalDateTime fecha;
 
     @Enumerated(EnumType.STRING)
-    private EstadoDelTopico estado;
+    private EstadoDelTopico estado = EstadoDelTopico.ACTIVO;
 
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
@@ -49,9 +49,7 @@ public class Topico {
         this.mensaje = datosRegistroTopico.mensaje();
         this.fecha = datosRegistroTopico.fecha();
         this.fecha =LocalDateTime.now();
-        this.estado = datosRegistroTopico.estado();
-//        this.autor = datosRegistroTopico.autor();
-//        this.id_usuario = datosRegistroTopico.id_usuario();
+//        this.estado = datosRegistroTopico.estado();
         this.curso = datosRegistroTopico.curso();
         this.activo = true;
     }

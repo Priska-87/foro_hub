@@ -18,11 +18,8 @@ public record TopicoDTO(
         @NotNull
         LocalDateTime fecha,
 
-        @NotNull
-        EstadoDelTopico estado,
-
 //        @NotNull
-//        String autor,
+//        EstadoDelTopico estado,
 
         @NotBlank
         String curso
